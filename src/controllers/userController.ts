@@ -16,6 +16,21 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+export const getUserById = async (req: Request, res: Response) => {
+  const id = req.params.id
+  try {
+    const queryText = 'SELECT id, name, email FROM users WHERE id = $1';
+    const { rows } = await pool.query(queryText, [id]);
+
+    res.status(200).json(rows[0]);
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao buscar usuários' });
+  }
+};
+
+
 // Função para adicionar um novo usuário
 export const addUser = async (req: Request, res: Response) => {
   const { name, email } = req.body;
